@@ -152,8 +152,16 @@
     if (strongDelegate && [strongDelegate respondsToSelector:@selector(webView:decidePolicyForNavigationAction:decisionHandler:)]) {
         [_webViewDelegate webView:webView decidePolicyForNavigationAction:navigationAction decisionHandler:decisionHandler];
     } else {
+        if ([_base isWebViewJavascriptBridgeURL:url]) {
+            return;
+        }
         decisionHandler(WKNavigationActionPolicyAllow);
     }
+}
+
+- (BOOL)isWebViewJavascriptBridgeURL:(NSURL *)url
+{
+    return [_base isWebViewJavascriptBridgeURL:url];
 }
 
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
